@@ -1,0 +1,89 @@
+# Linux for Security — Minimal Reference
+
+## Navigation & Files
+| Cmd | Use |
+|---|---|
+| `pwd` / `ls` / `cd` | location, list, move |
+| `touch` / `mkdir` / `cp` / `mv` / `rm` | create, copy, move, delete |
+| `cat` / `less` / `head` / `tail` | read files (full / paged / start / end) |
+
+## Search
+| Cmd | Use |
+|---|---|
+| `grep "pattern" file` | search **text** |
+| `find . -name "file"` | search **filesystem** |
+
+## Permissions
+```
+-rwxr-xr--   owner|group|others   r=4 w=2 x=1
+```
+| Octal | Perm |
+|---|---|
+| 755 | rwx r-x r-x |
+| 644 | rw- r-- r-- |
+
+- `chmod 755 file` → permissions
+- `chown user:group file` → ownership
+
+## Users & Privileges
+- `whoami` — current user
+- `id` — UID/GID/groups
+- `sudo <cmd>` — elevated exec
+
+## Processes & Jobs
+| Cmd | Use |
+|---|---|
+| `ps aux` / `top` / `htop` | list / monitor processes |
+| `kill <pid>` / `kill -9 <pid>` | graceful / force term (avoid -9 by default) |
+| `cmd &` / `jobs` / `fg` / `Ctrl+Z` | background, list, foreground, suspend |
+
+## Pipes & Redirection
+- `>` overwrite, `>>` append, `\|` pipe (stdout → stdin)
+- Recon pattern: `ps aux | grep nginx`
+
+## Text Processing (recon/log parsing)
+`sort` · `uniq` · `wc -l` · `cut` · `awk` · `sed`
+→ `sort file | uniq` = dedupe after sort
+
+## Shell & Environment
+| Cmd | Use |
+|---|---|
+| `export VAR=val` | persist var to child procs |
+| `echo $PATH` | executable search dirs |
+| `which <bin>` | resolve which binary runs |
+
+## Networking
+| Cmd | Use |
+|---|---|
+| `ip addr` / `ip route` | interfaces / routing |
+| `ping <host>` | reachability (ICMP) |
+| `curl -I` / `curl -v` | headers only / verbose — inspect & manipulate HTTP |
+| `wget <url>` | download |
+| `ss -tuln` | listening sockets (t=TCP u=UDP l=listening n=numeric) |
+
+## SSH
+- `ssh user@host` — remote login
+- `scp` — secure file copy over SSH *(needs more practice)*
+
+## Package Mgmt (Debian)
+`apt update` (refresh lists) → `apt upgrade` (upgrade installed) → `apt install/remove <pkg>`
+
+## Services (systemd)
+- `systemctl status/start/stop/restart <svc>`
+- `systemctl enable <svc>` = boot startup (≠ `start` = now)
+
+## Logs
+- `journalctl -u <svc> -f` — follow service logs
+- `dmesg` — kernel ring buffer (hw/kernel events)
+
+## Bash Scripting
+```bash
+#!/bin/bash
+if [ -f "file.txt" ]; then echo "exists"; else echo "missing"; fi
+for f in *.txt; do echo "$f"; done
+while true; do echo "running"; done
+```
+`chmod +x script.sh && ./script.sh`
+
+---
+**Next step:** convert these into small automation/recon scripts, not more syntax memorization.
